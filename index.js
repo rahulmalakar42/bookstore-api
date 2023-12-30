@@ -9,23 +9,6 @@ const Customer = require('./models/customer');
 const app = express();
 app.use(express.json());
 
-// app.post('/add-book', async (req, res) => {
-//     const book = await new Book(req.body);
-//     try{
-//       book.save();
-//       res.status(200).send(book);
-//     }
-//     catch(err){
-//       console.log(err);
-//     }
-
-//     Book.create(req.body).then((book)=>{
-//         res.status(200).send(book);
-//     }).catch((err)=>{
-//         console.log(err);
-//     })
-//   });
-
 app.post('/add-books', (req, res) => {
   Book.insertMany(req.body)
     .then((books) => {
@@ -36,14 +19,14 @@ app.post('/add-books', (req, res) => {
     });
 });
 
-app.post('/add-customers', (req, res) => {
-  Customer.insertMany(req.body)
-    .then((customers) => {
-      res.status(200).send(customers);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+app.post('/add-customers', async (req, res) => {
+  try{
+    const customers = await Customer.insertMany(req.body);
+    res.statusCode(200).send(customers);
+  }
+  catch(err){
+    res.status(400).send(err);
+  }
 });
 
 app.get('/', (req, res) => {
