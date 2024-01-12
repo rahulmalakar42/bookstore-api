@@ -20,11 +20,10 @@ app.post('/add-books', (req, res) => {
 });
 
 app.post('/add-customers', async (req, res) => {
-  try{
+  try {
     const customers = await Customer.insertMany(req.body);
     res.statusCode(200).send(customers);
-  }
-  catch(err){
+  } catch (err) {
     res.status(400).send(err);
   }
 });
@@ -127,6 +126,14 @@ app.delete('/customers/:id', async (req, res) => {
   }
 });
 
+app.use((req, res) => {
+  res.status(404).send(`PAGE NOT FOUND`);
+});
+
 app.listen(3000, (req, res) => {
-  console.log('listening...');
+  try {
+    console.log('listening...');
+  } catch (err) {
+    console.log(err);
+  }
 });
